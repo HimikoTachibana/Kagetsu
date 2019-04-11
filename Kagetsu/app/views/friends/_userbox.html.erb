@@ -1,0 +1,67 @@
+<div class="user-box">
+	<% if mode == 's' %>
+		<% if current_user.not_friends_with?(user.id) %>
+			<span class="label">Stranger</span>
+		<% else %>
+			<span class="label label-primary">Friend</span>
+		<% end %>
+	<% end %>
+
+	<div class="profile-image">
+		<% if user.profile && user.profile.image? %>
+			<%= image_tag user.profile.image.url %>
+		<% else %>
+			<%= image_tag "default_profile.jpg" %>
+		<% end %>
+	</div>
+
+	<div class="main-data"><%= user.profile.nickname %></div>
+	
+	<div class="sub-data">
+		<% if user.profile.is_gender_public && user.profile.gender > 0 %>
+			<% if user.profile.gender == 1 %> Male
+			<% elsif user.profile.gender == 2 %> Female
+			<% else %> Unknown <% end %>
+		<% end %>
+		<% if user.profile.is_dob_public && user.profile.dob %>				
+			(<%= user.profile.dob %>)
+		<% end %>
+		&nbsp;
+	</div>
+	
+	<div class="controls">
+		<div class="btn-group btn-group-justified">
+		<% if mode == 'f' %>
+			<%= link_to raw('<span class="glyphicon glyphicon-trash"></span> Remove'),
+				user_friend_path(@user, user),
+				:method=> :delete,
+				:data=> { :confirm=> 'Are you sure?' },
+				:class => "btn btn-sm btn-danger" %>
+			<%= link_to raw('<span class="glyphicon glyphicon-new-window"></span> Details'),
+				user_preview_path(user), 
+				:class => "btn btn-sm btn-default",
+				:remote => true,
+				:title => "Show Details", 
+				data: {toggle: "modal", target: "#my-modal"} %>
+			<%= link_to raw('<span class="glyphicon glyphicon-comment"></span> Chat'),
+				new_comment_path,
+				:class => "btn btn-sm btn-default",
+				:title => "Show Details" %>
+		<% else %>
+			<% if current_user.not_friends_with?(user.id) %>
+				<%= link_to raw('<span class="glyphicon glyphicon-plus"></span> Add'), 
+					user_friends_path(current_user, friend: user), 
+					:class => "btn btn-sm btn-success",
+					:title => "Add to My Friends",
+					:method => :post %>
+			<% end %>
+			<%= link_to raw('<span class="glyphicon glyphicon-new-window"></span> Details'),
+				user_preview_path(user), 
+				:class => "btn btn-sm btn-default",
+				:remote => true,
+				:title => "Show Details", 
+				data: {toggle: "modal", target: "#my-modal"} %>
+		<% end %>
+		</div>
+	</div>
+</div>

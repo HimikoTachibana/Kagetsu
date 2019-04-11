@@ -1,0 +1,8 @@
+$("#user_profile_image img").each(function() {
+	if(this.id == "userprofile_" + <%= params[:character_id] %>)	{ 
+		$(this).show();
+	}
+	else {
+		$(this).hide();
+	}
+});

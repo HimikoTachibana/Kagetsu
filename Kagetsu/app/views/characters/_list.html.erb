@@ -1,0 +1,41 @@
+<% @user.characters.each do |c| %>
+<div class="character-box">
+	<div class="profile-image">
+		<% if c.image? %>
+			<%= image_tag c.image.thumb.url %>
+		<% else %>
+			<%= image_tag("default_profile.jpg", size: "150x150") %>
+		<% end %>
+	</div>
+	<div class="main-data"><%= c.name %></div>
+	<div class="sub-data"><strong>Race</strong>: <%= c.race %></div>
+	<div class="controls">
+		<div class="btn-group btn-group-justified">
+		<% if current_user == @user %>
+		<%= link_to raw('<span class="glyphicon glyphicon-trash"></span> Remove'),
+			user_character_path(current_user, c),
+			method: :delete,
+			data: { confirm: 'Are you sure?' },
+			:class => "btn btn-sm btn-danger",
+			:title => "Delete" %>
+		<% end %>
+		<%= link_to raw('<span class="glyphicon glyphicon-new-window"></span> Details'),
+			user_character_path(@user, c),
+			:class => "btn btn-sm btn-default",
+			:title => "Show Details" %>
+		</div>
+	</div>
+</div>
+<% end %>
+
+<% if @user == current_user %>
+	<% if max_num_characters > @user.characters.length %>
+	<%= link_to '', new_user_character_path(current_user), { 
+		:class=>"add-button", 
+		:title=>"Add New Character" } %>
+	<% end %>
+<% else %>
+	<% if @user.characters.length == 0 %>
+	<div class="empty">User does not have any characters created.</div>
+	<% end %>
+<% end %>

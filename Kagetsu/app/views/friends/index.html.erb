@@ -1,0 +1,14 @@
+<div class="module-header">
+	<div class="module-title"><h1>My Friends (<%= @friends.size %>)</h1></div>
+</div>
+
+<div class="wrapper">
+	<% if @friends.size > 0 %>
+		<% @friends.each do |user| %>
+			<%= render 'userbox', { user: user, mode: 'f'} %>
+		<% end %>
+	<% end %>
+	<%= link_to '', new_user_friend_path(@user), { 
+		:class=>"add-button", 
+		:title=>"Add New Friends" } %>
+</div>

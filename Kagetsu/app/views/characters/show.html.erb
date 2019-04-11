@@ -1,0 +1,101 @@
+<div class="module-header">
+	<div class="left-control"><%= link_to 'Back', user_path(@user), :class=>"btn btn-xs btn-default" %></div>
+	<div class="module-title"><h1>Character Details</h1></div>
+</div>
+
+<div class="wrapper">
+	<div class="detail-box">
+
+		<% if current_user == @user %>
+		<div class="controls">
+			<div class="btn-group">
+			<%= link_to raw('<span class="glyphicon glyphicon-trash"></span> Remove'),
+				user_character_path(@user, @character),
+				method: :delete,
+				data: { confirm: 'Are you sure?' },
+				:class => "btn btn-danger",
+				:title => "Delete" %>
+			<%= link_to raw('<span class="glyphicon glyphicon-pencil"></span> Edit'),
+				edit_user_character_path(@user, @character),
+				:class => "btn btn-default",
+				:title => "Edit" %>
+			</div>
+		</div>
+
+		<% end %>
+		<div class="profile-image">
+			<% if @character.image? %>
+				<%= image_tag @character.image.url %>
+			<% else %>
+				<%= image_tag "default_profile.jpg" %>
+			<% end %>
+		</div>
+
+		<div class="details">
+			<div class="row">
+				<div class="col-md-2"><strong>Name:</strong></div>
+				<div class="col-md-10"><%= @character.name %></div>
+			</div>
+			<div class="row">
+				<div class="col-md-2"><strong>Race:</strong></div>
+				<div class="col-md-10"><%= @character.race %></div>
+			</div>
+			<div class="row">
+				<div class="col-md-2"><strong>Skills:</strong></div>
+				<div class="col-md-10">
+					<% if @character.skill.present? %>
+						<%= @character.skill %>
+					<% else %>
+						<span class="faded">Not set</span>
+					<% end %>
+				</div>
+			</div>
+			<hr />
+			<div class="row">
+				<div class="col-md-2"><strong>Physical:</strong></div>
+				<div class="col-md-10">
+					<% (1..10).each do |i| %>
+					<% @classname = ((@character.physical >= i) ? "glyphicon glyphicon-star": "glyphicon glyphicon-star-empty") %>
+					<span class="<%= @classname %>"></span>
+					<% end %>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-2"><strong>Magical:</strong></div>
+				<div class="col-md-10">
+					<% (1..10).each do |i| %>
+					<% @classname = ((@character.magical >= i) ? "glyphicon glyphicon-star": "glyphicon glyphicon-star-empty") %>
+					<span class="<%= @classname %>"></span>
+					<% end %>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-2"><strong>Special:</strong></div>
+				<div class="col-md-10">
+					<% (1..10).each do |i| %>
+					<% @classname = ((@character.special >= i) ? "glyphicon glyphicon-star": "glyphicon glyphicon-star-empty") %>
+					<span class="<%= @classname %>"></span>
+					<% end %>
+				</div>
+			</div>
+			<hr />
+			<div class="item">
+				<strong>Biography:</strong><br />
+				<% if @character.biography.present? %>
+					<%= simple_format(@character.biography) %>
+				<% else %>
+					<div class="empty">Biography is not set</div>
+				<% end %>
+			</div>
+			<hr />
+			<div class="item">
+				<strong>Psycological Profile:</strong><br />
+				<% if @character.psycological.present? %>
+					<%= simple_format(@character.psycological) %>
+				<% else %>
+					<div class="empty">Psycological profile is not set</div>
+				<% end %>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,76 @@
+<%= form_for([@user, @character]) do |f| %>
+	<% if @character.errors.any? %>
+		<div class="alert alert-danger" role="alert">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+			<span class="sr-only"></span>
+			<strong>Error!</strong><br />
+			<ul>
+			<% @character.errors.full_messages.each do |message| %>
+				<li><%= message %></li>
+			<% end %>
+			</ul>
+		</div>
+	<% end %>
+
+	<div class="form-group">
+	<%= f.label :image, 'Character Image' %>
+	<%= f.file_field :image %>
+	</div>
+
+	<% if f.object.image? %>
+	<div class="sample-image">
+		<%= image_tag f.object.image.thumb.url %>
+		<div class="checkbox">
+			<label><%= f.check_box :remove_image %> Remove Image</label>
+		</div>
+	</div>
+	<% end %>
+	<hr />
+
+	<div class="form-group">
+	<%= f.label :name, 'Name *' %>
+	<%= f.text_field :name, :class => 'form-control' %>
+	</div>
+
+	<div class="form-group">
+	<%= f.label :race, 'Race *' %>
+	<%= f.text_field :race, :class => 'form-control' %>
+	</div>
+
+	<div class="form-group">
+	<%= f.label :skill, 'Skills' %>
+	<%= f.text_field :skill, :class => 'form-control' %>
+	</div>
+	<hr />
+
+	<div class="form-group">
+	<%= f.label :physical, 'Physical' %> <span class="extra pull-right" id="physical-output"><%= @character.physical %></span>
+	<%= f.range_field :physical, :min=>0, :max=>10, :class=>"slide", :id=>"physical-slider"%>
+	</div>
+
+	<div class="form-group">
+	<%= f.label :magical, 'Magical' %> <span class="extra pull-right" id="magical-output"><%= @character.magical %></span>
+	<%= f.range_field :magical, :min=>0, :max=>10, :class=>"slide", :id=>"magical-slider"%>
+	</div>
+
+	<div class="form-group">
+	<%= f.label :special, 'Special' %> <span class="extra pull-right" id="special-output"><%= @character.special %></span>
+	<%= f.range_field :special, :min=>0, :max=>10, :class=>"slide", :id=>"special-slider"%>
+	</div>
+	<hr />
+
+	<div class="form-group">
+	<%= f.label :biography, 'Biography' %>
+	<%= f.text_area :biography, :class => 'form-control', :rows => '5' %>
+	</div>
+
+	<div class="form-group">
+	<%= f.label :psycological, 'Psycological Profile' %>
+	<%= f.text_area :psycological, :class => 'form-control', :rows => '5' %>
+	</div>
+
+	<div>
+	<%= f.submit 'Save', :class => 'btn btn-primary' %>
+	</div>
+<% end %>

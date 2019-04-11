@@ -1,0 +1,115 @@
+<div class="detail-box detail-box-small">
+	<div class="profile-image">
+		<% if user.profile && user.profile.image? %>
+			<%= image_tag user.profile.image.url %>
+		<% else %>
+			<%= image_tag "default_profile.jpg" %>
+		<% end %>
+	</div>
+	<div class="details">
+		<div class="row">
+			<div class="col-md-2"><strong>Nickname</strong>: </div>
+			<div class="col-md-10"><%= user.profile.nickname %></div>
+		</div>
+
+		<% if user.profile.is_gender_public && user.profile.gender > 0 %>				
+		<div class="row">
+			<div class="col-md-2"><strong>Gender</strong>: </div>
+			<div class="col-md-10">			
+			<% if user.profile.gender == 1 %> Male
+			<% elsif user.profile.gender == 2 %> Female <% end %>
+			</div>
+		</div>
+		<% end %>
+
+		<% if user.profile.is_dob_public && user.profile.dob %>				
+		<div class="row">
+			<div class="col-md-2"><strong>DOB</strong>: </div>
+			<div class="col-md-10"><%= user.profile.dob %></div>
+		</div>
+		<% end %>
+	
+		<% if user.profile.comment.present? %>
+		<hr />
+		<div class="item">
+			<strong>Comment</strong><br />
+			<%= simple_format(user.profile.comment) %>
+		</div>
+		<% end %>
+	</div>
+</div>
+
+<% user.characters.each do |c| %>
+<hr />
+<div class="detail-box detail-box-small">
+	<div class="profile-image">
+		<% if c.image? %>
+			<%= image_tag c.image.url %>
+		<% else %>
+			<%= image_tag "default_profile.jpg" %>
+		<% end %>
+	</div>
+
+	<div class="details">
+		<div class="row">
+			<div class="col-md-2"><strong>Name:</strong></div>
+			<div class="col-md-10"><%= c.name %></div>
+		</div>
+		<div class="row">
+			<div class="col-md-2"><strong>Race:</strong></div>
+			<div class="col-md-10"><%= c.race %></div>
+		</div>
+		
+		<% if c.skill.present? %>
+		<div class="row">
+			<div class="col-md-2"><strong>Skills:</strong></div>
+			<div class="col-md-10"><%= c.skill %></div>
+		</div>
+		<% end %>
+		<hr />
+		<div class="row">
+			<div class="col-md-2"><strong>Physical:</strong></div>
+			<div class="col-md-10">
+				<% (1..10).each do |i| %>
+				<% @classname = ((c.physical >= i) ? "glyphicon glyphicon-star": "glyphicon glyphicon-star-empty") %>
+				<span class="<%= @classname %>"></span>
+				<% end %>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-2"><strong>Magical:</strong></div>
+			<div class="col-md-10">
+				<% (1..10).each do |i| %>
+				<% @classname = ((c.magical >= i) ? "glyphicon glyphicon-star": "glyphicon glyphicon-star-empty") %>
+				<span class="<%= @classname %>"></span>
+				<% end %>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-2"><strong>Special:</strong></div>
+			<div class="col-md-10">
+				<% (1..10).each do |i| %>
+				<% @classname = ((c.special >= i) ? "glyphicon glyphicon-star": "glyphicon glyphicon-star-empty") %>
+				<span class="<%= @classname %>"></span>
+				<% end %>
+			</div>
+		</div>
+
+		<% if c.biography.present? %>
+		<hr />
+		<div class="item">
+			<strong>Biography:</strong><br />
+			<%= simple_format(c.biography) %>
+		</div>
+		<% end %>
+
+		<% if c.psycological.present? %>
+		<hr />
+		<div class="item">
+			<strong>Psycological Profile:</strong><br />
+			<%= simple_format(c.psycological) %>
+		</div>
+		<% end %>
+	</div>
+</div>
+<% end %>

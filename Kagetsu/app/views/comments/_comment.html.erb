@@ -1,0 +1,42 @@
+<li class="media comment" data-id="<%=comment.id %>">
+	<div class="media-body">
+		<% if comment.character %>
+				<% if comment.character.image? %>
+					<% if comment.character == current_character %>
+						<div class="self-head">
+							<%= image_tag character.image.url %>
+						</div>
+					<% else %>
+						<div class="other-head">
+							<%= image_tag character.image.url %>
+						</div>
+					<% end %>
+				<% else %>
+					<% if comment.character == current_character %>
+						<div class="self-head">
+							<%= image_tag "default_profile.jpg" %>
+						</div>
+					<% else %>
+						<div class="other-head">
+							<%= image_tag "default_profile.jpg" %>
+						</div>
+					<% end %>
+				<% end %>
+			
+			<% if comment.character == current_character %>
+				<div class="self-message">
+				<h4 class="media-heading"><%= link_to comment.character.name, target: '_blank' %> says
+				<small class="text-muted">[at <%= comment.created_at.strftime('%-d %B %Y, %H:%M:%S') %>]</small></h4>
+				<p><%= comment.body %></p>
+				</div>
+			<% else %>	
+				<div class="other-message">
+				<h4 class="media-heading"><%= link_to comment.character.name, target: '_blank' %> says
+				<small class="text-muted">[at <%= comment.created_at.strftime('%-d %B %Y, %H:%M:%S') %>]</small></h4>
+				<p><%= comment.body %></p>
+				</div>
+			<% end %>	
+  		<% end %>
+
+	</div>
+</li>

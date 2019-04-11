@@ -1,0 +1,118 @@
+<!-- logo window -->
+<div class="logo-window">
+	<%= image_tag "logo.png" %>
+</div>
+
+<!-- user window -->
+<div class="user-window">
+	<% if current_user %>
+		<div class="character">
+		<% if current_user.characters.any? %>
+			<%= form_tag user_set_default_character_path(:user_id => current_user.id),
+				method: :post,
+				remote: true do %>
+
+				<%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+				<div class="image-cropper">
+					<div class="image-content" id="user_profile_image">
+						<% current_user.characters.each do |c| %>
+							<% if c.image? %>
+								<%= image_tag c.image.url, {
+									:id => "userprofile_#{c.id}",
+									:style => ((c==current_character) ? "" : "display:none;") } %>
+							<% else %>
+								<%= image_tag "default_profile.jpg", {
+									:id => "userprofile_#{c.id}",
+									:style => ((c==current_character) ? "" : "display:none;") } %>
+							<% end %>
+						<% end %>
+					</div>
+				</div>
+				<%= select_tag 'character_id',
+					options_for_select(
+						current_user.characters.all.collect{|c| [c.name, c.id]},
+						:class => 'form-control character-selection',
+						:selected => current_user.profile.character_id ),
+					:class => 'form-control character-selection',
+					:onchange => '$("#character_submit").click();' %>
+				<%= submit_tag "Submit", {:class=>'hidden', :id=>"character_submit"} %>
+			<% end %>
+		<% else %>
+			<div class="image-cropper">
+				<div class="image-content" id="user_profile_image">
+					<%= image_tag "default_profile.jpg" %>
+				</div>
+			</div>
+		<% end %>
+		</div>
+
+		<!-- user related controls -->
+		<div class="controls">
+			<%= link_to 'Log Out',
+				logout_path,
+				data: { :confirm => 'Are you sure?' },
+				:class => "btn btn-block btn-default" %>
+			<%= link_to 'Profile/ Characters',
+				user_path(current_user),
+				{ :class => "btn btn-block btn-default" } %>
+		</div>
+	<% else %>
+		<div class="controls">
+			<%= link_to 'Login', login_path, { :class => "btn btn-block btn-default" } %>
+			<div class="userauth-extra">Not a member yet? <%= link_to 'Sign Up', new_user_path %></div>
+		</div>
+	<% end %>
+</div>
+
+<!-- navigation -->
+<div class="main-nav">
+	<ul class="nav nav-pills nav-stacked">
+		<li class="<%= 'active' if params[:controller] == 'comments' %>">
+			<%= link_to raw('<span class="glyphicon glyphicon-comment"></span> Chats'),
+				new_comment_path,
+				:title => "Currently active chats" %>
+		</li>
+
+		<% if current_user %>
+		<!-- authenticated user only -->
+		<li class="<%= 'active' if params[:controller] == 'users' || params[:controller] == 'profile' || params[:controller] == 'characters' %>">
+			<%= link_to raw('<span class="glyphicon glyphicon-user"></span> Profile/ Characters'),
+				user_path(current_user),
+				:title => "User" %>
+		</li>
+		<li class="<%= 'active' if params[:controller] == 'friends' %>">
+			<%= link_to raw('<span class="glyphicon glyphicon-heart"></span> Friends'),
+				user_friends_path(current_user),
+				:title => "List of all current friends" %>
+		</li>
+		<% end %>
+
+		<li class="<%= 'active' if params[:controller] == 'rules' %>">
+			<%= link_to raw('<span class="glyphicon glyphicon-star"></span> Rules'),
+				rules_index_path,
+				:title => "Rules of Conduct" %>
+		</li>
+
+	</ul>
+</div>
+
+<div class="user-nav">
+	<% if current_user %>
+		<!-- user related controls -->
+		<div class="welcome">
+		<%= current_user.profile.nickname %> (<%= current_user.username %>)
+		</div>
+		<div class="controls">
+			<%= link_to 'Log Out',
+				logout_path,
+				data: { :confirm => 'Are you sure?' },
+				:class => "btn btn-block btn-default" %>
+		</div>
+	<% else %>
+		<div class="controls">
+			<%= link_to 'Login', login_path, { :class => "btn btn-block btn-default" } %>
+			<div class="userauth-extra">Not a member yet? <%= link_to 'Sign Up', new_user_path %></div>
+		</div>
+	<% end %>
+</div>
+

@@ -1,0 +1,35 @@
+<div class="module-header">
+	<div class="left-control"><%= link_to 'Back', user_friends_path(@user), :class=>"btn btn-xs btn-default" %></div>
+	<div class="module-title"><h1>Search</h1></div>
+</div>
+
+<div class="wrapper" id="friend-lookup">
+	<%= form_tag new_user_friend_path(@user), method: :get, id: 'friend-lookup-form' do %>
+	<div class ="form-group">
+		<div class="input-group">
+			<%= text_field_tag :search_param, params[:search_param], 
+				placeholder: 'nickname', autofocus: true, 
+				class: 'form-control search-box input-lg' %>
+			<span class="input-group-btn">
+				<%= button_tag(type: :submit, class: 'btn btn-lg btn-success') do %>
+					<span class="glyphicon glyphicon-search"></span> Search
+				<% end %>
+			</span>
+		</div>
+	</div>
+	<% end %>
+	<hr />
+	<%= render 'common/spinner' %>
+	<% if @friends && @friends.size > 0 %>
+		<div id="friend-lookup-results">
+			<% @friends.each do |user| %>
+			<%= render 'userbox', { user: user, mode: 's' } %>
+			<% end %>
+		</div>
+	<% else %>
+		<div class="empty">
+			No users match the search criteria
+		</div>
+	<% end %>
+	<div id="friend-lookup-errors"></div>
+</div>
